@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Decision tree visualization</title>
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,700" rel="stylesheet"> 
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<!-- <script src="d3/d3.v4.js"></script> -->
+	<script src="https://d3js.org/d3.v4.js"></script>
+	<script src="node-pie.js"></script>
+	<script src="dot-parse.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div id="content">
+			<h1>Decision tree visualization</h1>
+			<svg></svg>
+			<div id="tooltip">Tooltip</div>
+			<button id="upload-btn" class="btn btn-tr">Data</button>
+			<button id="info-btn" class="btn btn-secondary btn-br">What is it?</button>
+	</div>
+	<div id="info-modal" class="modal">
+		<div class="modal-content">
+			<button class="btn btn-tr modal-close" onclick="this.parentNode.parentNode.style.display='none'">Close</button>
+			<p>This is yet another visualization of a decision tree. It is built using <a href="https://d3js.org/" target="_blank">d3.js</a> and utilizes the so-called force layout which enables the user to drag tree nodes and change the shape of the tree.</p>
+			<p>The default tree displayed here is from <a href="https://scikit-learn.org/stable/modules/generated/sklearn.tree.export_graphviz.html" target="_blank">this scikit-learn example</a>. You can replace it with any other scikit-learn's decision tree representation in .dot format. It was designed to work with classification trees.</p>
+			<p>Each tree node is a pie chart indicating proportions of different classes at respective branch. You can hover over the node of interest to see the exact number of data points from each class in the bottom left corner. Similarly, you can hover over tree links to see splitting conditions.</p>
+			<p>Project code is available on my <a href="https://github.com/glebkorolkov">Github page</a>.</p>
+		</div>
+	</div>
+	<div id="alert-modal" class="modal">
+		<div class="modal-content">
+			<button class="btn btn-tr modal-close" onclick="this.parentNode.parentNode.style.display='none'">Close</button>
+			<p id='alert-content'>Something went wrong! Could not parse input.</p>
+		</div>
+	</div>
+	<div id="input-modal" class="modal">
+		<div class="modal-content">
+			<button class="btn btn-tr modal-close" onclick="this.parentNode.parentNode.style.display='none'">Close</button>
+			<p>To change underlying tree data replace text below with the content of your .dot file and press 'Submit'. 
+				<a href="https://scikit-learn.org/stable/modules/generated/sklearn.tree.export_graphviz.html" target='_blank'>
+					Help on how to generate .dot file.
+				</a></p>
+			<textarea id="input-textarea" class="modal-textarea" autocomplete="off">
+digraph Tree {
+node [shape=box] ;
+0 [label="X[2] <= 2.45\ngini = 0.667\nsamples = 150\nvalue = [50, 50, 50]"] ;
+1 [label="gini = 0.0\nsamples = 50\nvalue = [50, 0, 0]"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label="X[3] <= 1.75\ngini = 0.5\nsamples = 100\nvalue = [0, 50, 50]"] ;
+0 -> 2 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+3 [label="X[2] <= 4.95\ngini = 0.168\nsamples = 54\nvalue = [0, 49, 5]"] ;
+2 -> 3 ;
+4 [label="X[3] <= 1.65\ngini = 0.041\nsamples = 48\nvalue = [0, 47, 1]"] ;
+3 -> 4 ;
+5 [label="gini = 0.0\nsamples = 47\nvalue = [0, 47, 0]"] ;
+4 -> 5 ;
+6 [label="gini = 0.0\nsamples = 1\nvalue = [0, 0, 1]"] ;
+4 -> 6 ;
+7 [label="X[3] <= 1.55\ngini = 0.444\nsamples = 6\nvalue = [0, 2, 4]"] ;
+3 -> 7 ;
+8 [label="gini = 0.0\nsamples = 3\nvalue = [0, 0, 3]"] ;
+7 -> 8 ;
+9 [label="X[0] <= 6.95\ngini = 0.444\nsamples = 3\nvalue = [0, 2, 1]"] ;
+7 -> 9 ;
+10 [label="gini = 0.0\nsamples = 2\nvalue = [0, 2, 0]"] ;
+9 -> 10 ;
+11 [label="gini = 0.0\nsamples = 1\nvalue = [0, 0, 1]"] ;
+9 -> 11 ;
+12 [label="X[2] <= 4.85\ngini = 0.043\nsamples = 46\nvalue = [0, 1, 45]"] ;
+2 -> 12 ;
+13 [label="X[1] <= 3.1\ngini = 0.444\nsamples = 3\nvalue = [0, 1, 2]"] ;
+12 -> 13 ;
+14 [label="gini = 0.0\nsamples = 2\nvalue = [0, 0, 2]"] ;
+13 -> 14 ;
+15 [label="gini = 0.0\nsamples = 1\nvalue = [0, 1, 0]"] ;
+13 -> 15 ;
+16 [label="gini = 0.0\nsamples = 43\nvalue = [0, 0, 43]"] ;
+12 -> 16 ;
+}
+			</textarea>
+			<button id="submit-btn" class="btn float-right">Submit</button>
+		</div>
+	</div>
+	<script type="text/javascript" src="tree.js"></script>
+</body>
+</html>
