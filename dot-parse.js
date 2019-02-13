@@ -21,6 +21,9 @@ function parseDot(dot_text) {
 				if (label.substr(0,4) == 'gini') {
 					node['gini'] = parseFloat(label.split(' = ')[1])
 				}
+				else if (label.substr(0,7) == 'entropy') {
+					node['entropy'] = parseFloat(label.split(' = ')[1])
+				}
 				else if (label.substr(0,7) == 'samples') {
 					node['samples'] = parseInt(label.split(' = ')[1])
 				}

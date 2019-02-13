@@ -82,12 +82,20 @@ function update() {
 			.on('drag', dragged)
 			.on('end', dragended))
 		.on('mouseover', function(d) {
-			tooltip.innerHTML = '[' + d.value + '] gini: ' + d.gini
+			if (d.gini != undefined) {
+				tooltip.innerHTML = '[' + d.value + '] gini: ' + d.gini	
+			} else if (d.entropy != undefined) {
+				tooltip.innerHTML = '[' + d.value + '] entropy: ' + d.entropy	
+			} else {
+				tooltip.innerHTML = '[' + d.value + ']'	
+			}
 			tooltip.style.display = 'block'
+			d3.select(this.children[0]).attr('stroke-width', '10px')
 		})
 		.on('mouseout', function(d) {
 			tooltip.innerHTML = ''
 			tooltip.style.display = 'none'
+			d3.select(this.children[0]).attr('stroke-width', '0')
 		})
 
 	node.exit().remove()
